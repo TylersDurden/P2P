@@ -10,3 +10,5 @@ credentials will be located in the usrbase.txt file
 
 The adding of new users, is still being developed. In fact this whole thing is still under 
 development much like every other project I have here on Github. 
+
+![loginScreen.png](https://raw.githubusercontent.com/TylersDurden/p2p/master/loginScreen.png)
