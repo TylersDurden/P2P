@@ -15,12 +15,19 @@ public class P2Pbase {
         switch(opt){
             case "-music":
                 //Run special music P2P program
+                try{MusicBootloader.executeScript();}
+                catch(Exception e){e.printStackTrace();}
+                new MusicBootloader();
                 break;
             case "-text":
                 //Do an IRC kind of txtmsg-P2P thing 
                 //Like Encrypted chat
+                Vector<String>txt = new Vector<>();
+                txt.add(new String(Login.query.get(0)));
+                new TextBootloader(txt);
             case "-file":
                 //More like a torrenting program
+                new FileBootloader();
             default:
                 break;
         }
@@ -201,22 +208,74 @@ public class P2Pbase {
     private static class MusicBootloader implements Runnable{
         
         public MusicBootloader(){
-            
+            run();
         }
         public void run(){
+            Scanner sc = new Scanner(System.in);
+            String input = sc.nextLine();
             
+            
+            
+            
+            sc.close();
         }
+        
+        public static void executeScript() throws Exception{
+        try{
+            Path mloader = Paths.get(System.getProperty("user.dir"),"music.sh");
+            String target = new String(mloader.toString());
+            Runtime rt = Runtime.getRuntime();
+            Process proc = rt.exec(target);
+            proc.waitFor();
+            StringBuffer output = new StringBuffer();
+            BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            String line = "";
+            while((line = br.readLine()) != null){
+                output.append(line+"\n");
+            }
+            System.out.println("### "+output);
+        }catch(Throwable t){t.printStackTrace();}   
+    }
+    
+        
+        
     }
 /** * * * * * **** ** ** * * ** * </EndOf:/MUSIC_BOOTLOADER_CLASS/:/> * * * * **** ** ** * * **/
 
 /** * * * * * **** ** ** * * ** * </:/TEXT_BOOTLOADER_CLASS/:/> * * * * **** ** ** * * * */
 private static class TextBootloader implements Runnable{
-    public TextBootloader(){
-        
+    
+    private static  Vector<String> messagePayloads = new Vector<>();
+    
+    public TextBootloader(Vector<String>flocs){
+        this.messagePayloads = flocs;
+        run();
     }
     public void run(){
-        
+       try{executeScript();}
+       catch(Exception e){e.printStackTrace();}
     }
+    
+    public static void executeScript() throws Exception{
+        String fnames = "";
+        for(String fname : messagePayloads){fnames+=fname+" ";}
+        try{
+            Path mloader = Paths.get(System.getProperty("user.dir"),"messenger.sh");
+            String target = new String(mloader.toString())+" "+fnames;
+           
+            Runtime rt = Runtime.getRuntime();
+            Process proc = rt.exec(target);
+            proc.waitFor();
+            StringBuffer output = new StringBuffer();
+            BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            String line = "";
+            while((line = br.readLine()) != null){
+                output.append(line+"\n");
+            }
+            System.out.println(output);
+        }catch(Throwable t){t.printStackTrace();}   
+    }
+    
 }
 /** * * * * * **** ** ** * * ** * </EndOf:/TEXT_BOOTLOADER_CLASS/:/> * * * * **** ** ** * * * */
 
